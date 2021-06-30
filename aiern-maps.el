@@ -38,15 +38,16 @@
 
 ;;; Normal state
 
-(defdeino aiern-comma (aiern-normal-state-map ",") ("`" nil "cancel"))
-(defdeino aiern-comma (aiern-normal-state-map ".") ("`" nil "cancel"))
-(defdeino aiern-comma (aiern-normal-state-map " ") ("`" nil "cancel"))
+(defdeino aiern-universal (:hint t) ("`" nil "cancel"))
+(defdeino aiern-comma (aiern-normal-state-map "," :inherit aiern-universal))
+(defdeino aiern-comma (aiern-normal-state-map "." :inherit aiern-universal))
+(defdeino aiern-comma (aiern-normal-state-map " " :inherit aiern-universal))
 (defdeino aiern-comma (aiern-normal-state-map ";")
   (";" aiern-ex "aiern-ex")
   ("'" evil-ex "evil-ex")
   ("`" nil "cancel"))
-(defdeino aiern-comma (aiern-normal-state-map "/") ("`" nil "cancel"))
-(defdeino aiern-comma (aiern-normal-state-map "\\") ("`" nil "cancel"))
+(defdeino aiern-comma (aiern-normal-state-map "/" :inherit aiern-universal))
+(defdeino aiern-comma (aiern-normal-state-map "\\" :inherit aiern-universal))
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
