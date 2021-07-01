@@ -48,6 +48,11 @@
   ("`" nil "cancel"))
 (defdeino aiern-forward-slash (aiern-normal-state-map "/" :inherit aiern-universal))
 (defdeino aiern-back-slash (aiern-normal-state-map "\\" :inherit aiern-universal))
+(defdeino aiern-lsb (aiern-normal-state-map "[" :inherit aiern-universal))
+(defdeino aiern-rsb (aiern-normal-state-map "]" :inherit aiern-universal))
+(defdeino aiern-apostrophe (aiern-normal-state-map "'" :inherit aiern-universal))
+(defdeino aiern-dash (aiern-normal-state-map "-" :inherit aiern-universal))
+(defdeino aiern-equals (aiern-normal-state-map "=" :inherit aiern-universal))
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
