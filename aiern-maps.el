@@ -38,21 +38,101 @@
 
 ;;; Normal state
 
-(defdeino aiern-universal (:hint t) ("`" nil "cancel"))
-(defdeino aiern-comma (aiern-normal-state-map "," :inherit aiern-universal))
-(defdeino aiern-period (aiern-normal-state-map "." :inherit aiern-universal))
-(defdeino aiern-space (aiern-normal-state-map " " :inherit aiern-universal))
-(defdeino aiern-semicolon (aiern-normal-state-map ";")
-  (";" aiern-ex "aiern-ex")
-  ("'" evil-ex "evil-ex")
-  ("`" nil "cancel"))
-(defdeino aiern-forward-slash (aiern-normal-state-map "/" :inherit aiern-universal))
-(defdeino aiern-back-slash (aiern-normal-state-map "\\" :inherit aiern-universal))
-(defdeino aiern-lsb (aiern-normal-state-map "[" :inherit aiern-universal))
-(defdeino aiern-rsb (aiern-normal-state-map "]" :inherit aiern-universal))
-(defdeino aiern-apostrophe (aiern-normal-state-map "'" :inherit aiern-universal))
-(defdeino aiern-dash (aiern-normal-state-map "-" :inherit aiern-universal))
-(defdeino aiern-equals (aiern-normal-state-map "=" :inherit aiern-universal))
+(defvar aiern-universal-list nil)
+(defvar aiern-universal-temporarily-list '(:color blue))
+(defvar hydra-enabled-temporarily nil)
+(defvar deino-enabled-temporarily nil)
+
+(defun aiern-alloy (name) (interactive)
+  (funcall (intern (concat
+    name
+    (if (or hydra-enabled-temporarily deino-enabled-temporarily) "-temporarily" "")
+    "/body")))
+  (setq hydra-enabled-temporarily nil
+    deino-enabled-temporarily nil))
+
+(mapc #'(lambda (aiern-deino) (interactive)
+  (let* ((name (concat "aiern-" aiern-deino))
+          (the-list '(("`" nil "cancel"))))
+    (eval `(defdeino ,(intern name) (,@aiern-universal-list) ,@the-list))
+    (eval `(defdeino ,(intern (concat name "-temporarily")) (,@aiern-universal-temporarily-list) ,@the-list))
+    (eval `(defun ,(intern (concat name "-alloy")) nil (interactive) (aiern-alloy ,name)))))
+  '("comma" "period" "space" "semicolon" "forward-slash"
+    "backward-slash" "lsb" "rsb" "apotrophe" "dash"
+    "equals" "backtick"))
+
+;; (defvar aiern-comma-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-comma (,@aiern-universal-list) ,@aiern-comma-list))
+;; (eval `(defdeino aiern-comma-temporarily (,@aiern-universal-temporarily-list) ,@aiern-comma-list))
+;; (defun aiern-comma-alloy nil (interactive) (aiern-alloy "aiern-comma"))
+(alloy-def :keymaps 'aiern-normal-state-map "," 'aiern-comma-alloy)
+
+;; (defvar aiern-period-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-period (,@aiern-universal-list) ,@aiern-period-list))
+;; (eval `(defdeino aiern-period-temporarily (,@aiern-universal-temporarily-list) ,@aiern-period-list))
+;; (defun aiern-period-alloy nil (interactive) (aiern-alloy "aiern-period"))
+(alloy-def :keymaps 'aiern-normal-state-map "." 'aiern-period-alloy)
+
+;; (defvar aiern-space-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-space (,@aiern-universal-list) ,@aiern-space-list))
+;; (eval `(defdeino aiern-space-temporarily (,@aiern-universal-temporarily-list) ,@aiern-space-list))
+;; (defun aiern-space-alloy nil (interactive) (aiern-alloy "aiern-space"))
+(alloy-def :keymaps 'aiern-normal-state-map " " 'aiern-space-alloy)
+
+;; TODO: Convert these three into a function
+(defvar aiern-semicolon-list '(("`" nil "cancel") ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex")))
+(eval `(defdeino aiern-semicolon (,@aiern-universal-list) ,@aiern-semicolon-list))
+(eval `(defdeino aiern-semicolon-temporarily (,@aiern-universal-temporarily-list) ,@aiern-semicolon-list))
+;; (defun aiern-semicolon-alloy nil (interactive) (aiern-alloy "aiern-semicolon"))
+(alloy-def :keymaps 'aiern-normal-state-map ";" 'aiern-semicolon-alloy)
+
+;; (defvar aiern-forward-slash-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-forward-slash (,@aiern-universal-list) ,@aiern-forward-slash-list))
+;; (eval `(defdeino aiern-forward-slash-temporarily (,@aiern-universal-temporarily-list) ,@aiern-forward-slash-list))
+;; (defun aiern-forward-slash-alloy nil (interactive) (aiern-alloy "aiern-forward-slash"))
+(alloy-def :keymaps 'aiern-normal-state-map "/" 'aiern-forward-slash-alloy)
+
+;; (defvar aiern-back-slash-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-back-slash (,@aiern-universal-list) ,@aiern-back-slash-list))
+;; (eval `(defdeino aiern-back-slash-temporarily (,@aiern-universal-temporarily-list) ,@aiern-back-slash-list))
+;; (defun aiern-back-slash-alloy nil (interactive) (aiern-alloy "aiern-back-slash"))
+(alloy-def :keymaps 'aiern-normal-state-map "\\" 'aiern-back-slash-alloy)
+
+;; (defvar aiern-lsb-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-lsb (,@aiern-universal-list) ,@aiern-lsb-list))
+;; (eval `(defdeino aiern-lsb-temporarily (,@aiern-universal-temporarily-list) ,@aiern-lsb-list))
+;; (defun aiern-lsb-alloy nil (interactive) (aiern-alloy "aiern-lsb"))
+(alloy-def :keymaps 'aiern-normal-state-map "[" 'aiern-lsb-alloy)
+
+;; (defvar aiern-rsb-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-rsb (,@aiern-universal-list) ,@aiern-rsb-list))
+;; (eval `(defdeino aiern-rsb-temporarily (,@aiern-universal-temporarily-list) ,@aiern-rsb-list))
+;; (defun aiern-rsb-alloy nil (interactive) (aiern-alloy "aiern-rsb"))
+(alloy-def :keymaps 'aiern-normal-state-map "]" 'aiern-comma-alloy)
+
+;; (defvar aiern-apostrophe-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-apostrophe (,@aiern-universal-list) ,@aiern-apostrophe-list))
+;; (eval `(defdeino aiern-apostrophe-temporarily (,@aiern-universal-temporarily-list) ,@aiern-apostrophe-list))
+;; (defun aiern-apostrophe-alloy nil (interactive) (aiern-alloy "aiern-apostrophe"))
+(alloy-def :keymaps 'aiern-normal-state-map "'" 'aiern-apostrophe-alloy)
+
+;; (defvar aiern-dash-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-dash (,@aiern-universal-list) ,@aiern-dash-list))
+;; (eval `(defdeino aiern-dash-temporarily (,@aiern-universal-temporarily-list) ,@aiern-dash-list))
+;; (defun aiern-dash-alloy nil (interactive) (aiern-alloy "aiern-dash"))
+(alloy-def :keymaps 'aiern-normal-state-map "-" 'aiern-dash-alloy)
+
+;; (defvar aiern-equals-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-equals (,@aiern-universal-list) ,@aiern-equals-list))
+;; (eval `(defdeino aiern-equals-temporarily (,@aiern-universal-temporarily-list) ,@aiern-equals-list))
+;; (defun aiern-equals-alloy nil (interactive) (aiern-alloy "aiern-equals"))
+(alloy-def :keymaps 'aiern-normal-state-map "=" 'aiern-equals-alloy)
+
+;; (defvar aiern-backtick-list '(("`" nil "cancel")))
+;; (eval `(defdeino aiern-backtick (,@aiern-universal-list) ,@aiern-backtick-list))
+;; (eval `(defdeino aiern-backtick-temporarily (,@aiern-universal-temporarily-list) ,@aiern-backtick-list))
+;; (defun aiern-backtick-alloy nil (interactive) (aiern-alloy "aiern-backtick"))
+(alloy-def :keymaps 'aiern-normal-state-map "`" 'aiern-backtick-alloy)
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
@@ -609,6 +689,7 @@ included in `aiern-insert-state-bindings' by default."
 ;; (aiern-ex-define-cmd "res[ize]" 'aiern-ex-resize)
 ;; (aiern-ex-define-cmd "u[ndo]" 'aiern-undo)
 ;; (aiern-ex-define-cmd "red[o]" 'aiern-redo)
+(aiern-ex-define-cmd "ke[yboard-quit]" 'keyboard-quit)
 
 ;; (when (featurep 'tab-bar)
 ;;   (aiern-ex-define-cmd "tabnew" 'tab-bar-new-tab)
