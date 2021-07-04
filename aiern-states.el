@@ -34,7 +34,7 @@
 (aiern-define-state normal
   "Normal state.
 AKA \"Command\" state."
-  :tag " <AN> "
+  :tag " AN "
   :enable (motion)
   :exit-hook (aiern-repeat-start-hook)
   (cond
@@ -107,7 +107,7 @@ commands opening a new line."
 
 (aiern-define-state insert
   "Insert state."
-  :tag " <AI> "
+  :tag " AI "
   :cursor (bar . 2)
   :message "-- INSERT --"
   :entry-hook (aiern-start-track-last-insertion)
@@ -219,7 +219,7 @@ the selection is enabled.
          (message (intern (format "%s-message" name)))
          (tagvar (intern (format "%s-tag" name)))
          (type selection)
-         (tag " <AV> ")
+         (tag " AV ")
          arg key string)
     ;; collect keywords
     (while (keywordp (car-safe body))
@@ -259,22 +259,22 @@ the selection is enabled.
   "Characterwise selection."
   :type inclusive
   :message "-- VISUAL --"
-  :tag " <AV> ")
+  :tag " AV ")
 
 (aiern-define-visual-selection line
   "Linewise selection."
   :message "-- VISUAL LINE --"
-  :tag " <AVl> ")
+  :tag " AVl ")
 
 (aiern-define-visual-selection screen-line
   "Linewise selection in `visual-line-mode'."
   :message "-- SCREEN LINE --"
-  :tag " <AVs> ")
+  :tag " AVs ")
 
 (aiern-define-visual-selection block
   "Blockwise selection."
   :message "-- VISUAL BLOCK --"
-  :tag " <AVb> "
+  :tag " AVb "
   (aiern-transient-mark -1)
   ;; refresh the :corner property
   (setq aiern-visual-properties
@@ -840,7 +840,7 @@ CORNER defaults to `upper-left'."
 
 (aiern-define-state operator
   "Operator-Pending state."
-  :tag " <AO> "
+  :tag " AO "
   :cursor aiern-half-cursor
   :enable (aiern-operator-shortcut-map operator motion normal))
 
@@ -863,7 +863,7 @@ CORNER defaults to `upper-left'."
 
 (aiern-define-state replace
   "Replace state."
-  :tag " <AR> "
+  :tag " AR "
   :cursor hbar
   :message "-- REPLACE --"
   :input-method t
@@ -907,14 +907,14 @@ CORNER defaults to `upper-left'."
 
 (aiern-define-state motion
   "Motion state."
-  :tag " <AM> "
+  :tag " AM "
   :suppress-keymap t)
 
 ;;; Emacs state
 
 (aiern-define-state emacs
   "Emacs state."
-  :tag " <AE> "
+  :tag " AE "
   :message "-- EMACS --"
   :input-method t
   :intercept-esc nil)
