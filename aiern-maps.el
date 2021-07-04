@@ -76,7 +76,8 @@
     ("backtick" . "`")))
 
 ;; (aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
-(defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
+(defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex"))
+(defdeino+ aiern-semicolon nil (";" aiern-ex "aiern-ex"))
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
