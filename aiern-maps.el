@@ -43,25 +43,25 @@
 (defvar hydra-enabled-temporarily nil)
 (defvar deino-enabled-temporarily nil)
 
-(defun aiern-alloy (name) (interactive)
-  (funcall (intern (concat
-    name
-    (if (or hydra-enabled-temporarily deino-enabled-temporarily) "-temporarily" "")
-    "/body")))
-  (setq hydra-enabled-temporarily nil
-    deino-enabled-temporarily nil))
+;; (defun aiern-alloy (name) (interactive)
+;;   (funcall (intern (concat
+;;     name
+;;     (if (or hydra-enabled-temporarily deino-enabled-temporarily) "-temporarily" "")
+;;     "/body")))
+;;   (setq hydra-enabled-temporarily nil
+;;     deino-enabled-temporarily nil))
 
-(defmacro aiern-deino+ (name &rest args) (interactive)
-  `(defdeino+ ,name nil ,@args)
-  `(defdeino+ ,(intern (concat (symbol-name name) "-temporarily")) nil ,@args))
+;; (defmacro aiern-deino+ (name &rest args) (interactive)
+;;   `(defdeino+ ,name nil ,@args)
+;;   `(defdeino+ ,(intern (concat (symbol-name name) "-temporarily")) nil ,@args))
 
 (mapc #'(lambda (aiern-cons) (interactive)
   (let* ((name (concat "aiern-" (car aiern-cons)))
           (the-list '(("`" nil "cancel"))))
     (eval `(defdeino ,(intern name) (,@aiern-universal-list) ,@the-list))
-    (eval `(defdeino ,(intern (concat name "-temporarily")) (,@aiern-universal-temporarily-list) ,@the-list))
-    (eval `(defun ,(intern (concat name "-alloy")) nil (interactive) (aiern-alloy ,name)))
-    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,(cdr aiern-cons) ',(intern (concat name "-alloy"))))))
+    ;; (eval `(defdeino ,(intern (concat name "-temporarily")) (,@aiern-universal-temporarily-list) ,@the-list))
+    ;; (eval `(defun ,(intern (concat name "-alloy")) nil (interactive) (aiern-alloy ,name)))
+    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,(cdr aiern-cons) ',(intern (concat name "/body"))))))
   '(("comma" . ",")
     ("period" . ".")
     ("space" . " ")
@@ -75,7 +75,8 @@
     ("equals" . "=")
     ("backtick" . "`")))
 
-(aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
+;; (aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
+(defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
