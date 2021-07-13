@@ -634,7 +634,7 @@ included in `aiern-insert-state-bindings' by default."
 ;; (aiern-ex-define-cmd "res[ize]" 'aiern-ex-resize)
 ;; (aiern-ex-define-cmd "u[ndo]" 'aiern-undo)
 ;; (aiern-ex-define-cmd "red[o]" 'aiern-redo)
-(aiern-ex-define-cmd "ke[yboard-quit]" 'keyboard-quit)
+(aiern-ex-define-cmd "ke[yboard-quit]" 'meq/doom/escape)
 
 ;; (when (featurep 'tab-bar)
 ;;   (aiern-ex-define-cmd "tabnew" 'tab-bar-new-tab)
