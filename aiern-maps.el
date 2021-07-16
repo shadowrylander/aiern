@@ -40,8 +40,6 @@
 
 (defvar aiern-universal-list nil)
 (defvar aiern-universal-temporarily-list '(:color blue))
-(defvar hydra-enabled-temporarily nil)
-(defvar deino-enabled-temporarily nil)
 
 ;; (defun aiern-alloy (name) (interactive)
 ;;   (funcall (intern (concat
@@ -76,8 +74,8 @@
     ("backtick" . "`")))
 
 ;; (aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
-(defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex"))
-(defdeino+ aiern-semicolon nil (";" aiern-ex "aiern-ex"))
+(defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex" :color red))
+(defdeino+ aiern-semicolon nil (";" aiern-ex "aiern-ex" :color red))
 
 ;; (define-key aiern-normal-state-map "a" 'aiern-append)
 ;; (define-key aiern-normal-state-map "A" 'aiern-append-line)
