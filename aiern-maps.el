@@ -68,7 +68,7 @@
     ("backward-slash" . "\\")
     ("lsb" . "[")
     ("rsb" . "]")
-    ("apotrophe" . "'")
+    ("apostrophe" . "'")
     ("dash" . "-")
     ("equals" . "=")
     ("backtick" . "`")))
