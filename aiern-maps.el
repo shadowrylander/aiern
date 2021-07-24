@@ -39,39 +39,25 @@
 ;;; Normal state
 
 (defvar aiern-universal-list nil)
-(defvar aiern-universal-temporarily-list '(:color blue))
-
-;; (defun aiern-alloy (name) (interactive)
-;;   (funcall (intern (concat
-;;     name
-;;     (if (or hydra-enabled-temporarily deino-enabled-temporarily) "-temporarily" "")
-;;     "/body")))
-;;   (setq hydra-enabled-temporarily nil
-;;     deino-enabled-temporarily nil))
-
-;; (defmacro aiern-deino+ (name &rest args) (interactive)
-;;   `(defdeino+ ,name nil ,@args)
-;;   `(defdeino+ ,(intern (concat (symbol-name name) "-temporarily")) nil ,@args))
 
 (mapc #'(lambda (aiern-cons) (interactive)
   (let* ((name (concat "aiern-" (car aiern-cons)))
+          (key (cdr aiern-cons))
           (the-list '(("`" nil "cancel"))))
-    (eval `(defdeino ,(intern name) (,@aiern-universal-list) ,@the-list))
-    ;; (eval `(defdeino ,(intern (concat name "-temporarily")) (,@aiern-universal-temporarily-list) ,@the-list))
-    ;; (eval `(defun ,(intern (concat name "-alloy")) nil (interactive) (aiern-alloy ,name)))
-    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,(cdr aiern-cons) ',(intern (concat name "/body"))))))
-  '(("comma" . ",")
-    ("period" . ".")
-    ("space" . " ")
-    ("semicolon" . ";")
-    ("forward-slash" . "/")
+    (eval `(defdeino ,(intern name) (,@aiern-universal-list) ,(concat "; a " key) ,@the-list))
+    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,key ',(intern (concat name "/body"))))))
+  '(("apostrophe" . "'")
+    ("backtick" . "`")
     ("backward-slash" . "\\")
-    ("lsb" . "[")
-    ("rsb" . "]")
-    ("apostrophe" . "'")
+    ("comma" . ",")
     ("dash" . "-")
     ("equals" . "=")
-    ("backtick" . "`")))
+    ("forward-slash" . "/")
+    ("lsb" . "[")
+    ("period" . ".")
+    ("rsb" . "]")
+    ("semicolon" . ";")
+    ("space" . " ")))
 
 ;; (aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
 (defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex" :color red))
