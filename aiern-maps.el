@@ -57,7 +57,7 @@
     ("period" . ".")
     ("rsb" . "]")
     ("semicolon" . ";")
-    ("space" . " ")))
+    ("space" . "SPC")))
 
 ;; (aiern-deino+ aiern-semicolon ("'" evil-ex "evil-ex") (";" aiern-ex "aiern-ex"))
 (defdeino+ aiern-semicolon nil ("'" evil-ex "evil-ex" :color red))
