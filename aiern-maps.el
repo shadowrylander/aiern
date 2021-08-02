@@ -32,7 +32,7 @@
 (require 'aiern-common)
 (require 'alloy)
 (require 'deino)
-(require 'naked)
+(require 'meq)
 
 ;;; Code:
 
@@ -45,7 +45,7 @@
           (key (cdr aiern-cons))
           (the-list '(("`" nil "cancel"))))
     (eval `(defdeino ,(intern name) (,@aiern-universal-list) ,(concat "; a " key) ,@the-list))
-    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,key ',(intern (concat name "/body"))))))
+    (eval `(alloy-def :keymaps 'aiern-normal-state-map ,key ',(meq/inconcat name "/body")))))
   '(("apostrophe" . "'")
     ("backtick" . "`")
     ("backward-slash" . "\\")
@@ -510,9 +510,9 @@ included in `aiern-insert-state-bindings' by default."
   [right] 'forward-char)
 
 (mapc #'(lambda (state) (interactive)
-  (add-hook (intern (concat "aiern-" state "-state-entry-hook")) #'(lambda nil (interactive)
-    `(use-global-map ,(intern (concat "aiern-" state "-state-map")))))
-  (add-hook (intern (concat "aiern-" state "-state-exit-hook")) #'(lambda nil (interactive)
+  (add-hook (meq/inconcat "aiern-" state "-state-entry-hook") #'(lambda nil (interactive)
+    `(use-global-map ,(meq/inconcat "aiern-" state "-state-map"))))
+  (add-hook (meq/inconcat "aiern-" state "-state-exit-hook") #'(lambda nil (interactive)
     (use-global-map global-map))))
   '("insert" "normal"))
 
