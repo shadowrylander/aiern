@@ -146,6 +146,8 @@
 (define-key aiern-normal-state-map "u" 'aiern-undo)
 (define-key aiern-normal-state-map "\C-r" 'aiern-redo)
 
+(with-eval-after-load 'org (define-key aiern-normal-state-map "q" 'org-cycle))
+
 ;; window commands
 (define-prefix-command 'aiern-window-map)
 (define-key aiern-window-map "b" 'aiern-window-bottom-right)
@@ -487,6 +489,8 @@ included in `aiern-insert-state-bindings' by default."
 
   [?\d] 'delete-backward-char
   (naked "RET") 'newline-and-indent)
+
+(with-eval-after-load 'org (define-key aiern-insert-state-map [tab] 'org-cycle))
 
 (alloy-def :keymaps '(aiern-insert-state-map aiern-normal-state-map)
   "C-x C-c" 'save-buffers-kill-terminal
