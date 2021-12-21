@@ -146,8 +146,6 @@
 (define-key aiern-normal-state-map "u" 'aiern-undo)
 (define-key aiern-normal-state-map "\C-r" 'aiern-redo)
 
-(with-eval-after-load 'org (define-key aiern-normal-state-map "q" 'org-cycle))
-
 ;; window commands
 (define-prefix-command 'aiern-window-map)
 (define-key aiern-window-map "b" 'aiern-window-bottom-right)
