@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-10-29 Sat 06:37 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Jeet Ray" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/primary/syvl.css" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.ico" sizes="any" />
+<link rel="icon" href="https://combinatronics.io/sylvorg/settings/main/src/icons/favicons/shiny-zigzagoon-galar.svg" />
+<link rel="manifest" href="https://combinatronics.io/sylvorg/settings/main/manifest.json" />
+<link rel="stylesheet" type="text/css" href="https://combinatronics.io/sylvorg/settings/main/src/styles/highlight/paraiso-dark.min.css" />
+<script src="https://combinatronics.io/sylvorg/settings/main/src/scripts/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<div class="header">
+<h1>We Are Syvlorg.</h1>
+<a href="">About Me</a>
+<a href="">About This Website</a>
+<a href="">About Syvlorg</a>
+<a href="https://resume.syvl.org">Résumé</a>
+<a href="https://index.syvl.org">Index</a>
+</div>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#installation">Installation</a>
+<ul>
+<li><a href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#mailing-list">Mailing list</a></li>
+<li><a href="#irc">IRC</a></li>
+<li><a href="#contribution">Contribution</a></li>
+</ul>
+</div>
+</div>
+
+<div id="org3c306db" class="figure">
+<p><img src="https://raw.githubusercontent.com/emacs-aiern/aiern/master/doc/logo.png" alt="logo.png" />
+</p>
+</div>
+
+<p>
+<a href="https://travis-ci.org/emacs-aiern/aiern">[[https://travis-ci.org/emacs-aiern/aiern.svg?branch=master</a>]]
+<a href="https://melpa.org/#/aiern">[[https://melpa.org/packages/aiern-badge.svg</a>]]
+<a href="https://stable.melpa.org/#/aiern">[[https://stable.melpa.org/packages/aiern-badge.svg</a>]]
+<a href="https://aiern.readthedocs.io/en/latest/?badge=latest">[[https://readthedocs.org/projects/aiern/badge/?version=latest</a>]]
+<a href="https://www.gnu.org/licenses/gpl-3.0">[[https://img.shields.io/badge/License-GPL%20v3-blue.svg</a>]]
+</p>
+
+<p>
+aiern is an <b>e*xtensible *vi</b> *l*ayer for
+<a href="http://www.gnu.org/software/emacs/">Emacs</a>. It emulates the main
+features of <a href="http://www.vim.org/">Vim</a>, and provides facilities for
+writing custom extensions. Also see our page on
+<a href="http://emacswiki.org/emacs/aiern">EmacsWiki</a>.
+</p>
+
+<div id="outline-container-installation" class="outline-2">
+<h2 id="installation">Installation</h2>
+<div class="outline-text-2" id="text-installation">
+<p>
+See the
+<a href="https://aiern.readthedocs.io/en/latest/overview.html#installation-via-package-el">official
+documentation</a> for installation instructions. We recommend using
+<i>package.el</i>.
+</p>
+
+<p>
+As a quickstart, you can add the following code to your Emacs init file.
+</p>
+
+<pre class="example" id="org3a721c4">
+  ;; Set up package.el to work with MELPA
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  (package-refresh-contents)
+
+  ;; Download aiern
+  (unless (package-installed-p 'aiern)
+    (package-install 'aiern))
+
+  ;; Enable aiern
+  (require 'aiern)
+  (aiern-mode 1)
+</pre>
+</div>
+
+<div id="outline-container-dependencies" class="outline-3">
+<h3 id="dependencies">Dependencies</h3>
+<div class="outline-text-3" id="text-dependencies">
+<ul class="org-ul">
+<li>aiern requires Emacs 24.1 or later.</li>
+
+<li>aiern requires any of the following for <code>C-r</code>:
+
+<ul class="org-ul">
+<li><code>undo-redo</code> from Emacs 28</li>
+<li>The <a href="http://www.emacswiki.org/emacs/UndoTree">undo-tree</a> package</li>
+<li>The <a href="https://gitlab.com/ideasman42/emacs-undo-fu">undo-fu</a> package</li>
+</ul></li>
+
+<li>For the motions <code>g;</code> <code>g,</code> and for the last-change-register <code>.</code>, aiern
+requires the <a href="https://github.com/emacs-aiern/goto-chg">goto-chg.el</a>
+package, which provides the functions <code>goto-last-change</code> and
+<code>goto-last-change-reverse</code>.</li>
+
+<li>For Emacs 24.1 and 24.2 aiern also requires
+<a href="https://elpa.gnu.org/packages/cl-lib.html">cl-lib</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-documentation" class="outline-2">
+<h2 id="documentation">Documentation</h2>
+<div class="outline-text-2" id="text-documentation">
+<p>
+The latest version of the documentation is readable online
+<a href="https://aiern.readthedocs.io/en/latest/index.html">here</a>. It is also
+available as
+<a href="https://readthedocs.org/projects/aiern/downloads/pdf/latest/">PDF</a>
+and as
+<a href="https://readthedocs.org/projects/aiern/downloads/epub/latest/">EPUB</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-mailing-list" class="outline-2">
+<h2 id="mailing-list">Mailing list</h2>
+<div class="outline-text-2" id="text-mailing-list">
+<p>
+aiern is discussed at the
+<a href="http://lists.ourproject.org/cgi-bin/mailman/listinfo/implementations-list">gmane.emacs.vim-emulation</a>
+mailing list.
+</p>
+</div>
+</div>
+
+<div id="outline-container-irc" class="outline-2">
+<h2 id="irc">IRC</h2>
+<div class="outline-text-2" id="text-irc">
+<p>
+Visit us on <code>irc.libera.chat #aiern-mode</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-contribution" class="outline-2">
+<h2 id="contribution">Contribution</h2>
+<div class="outline-text-2" id="text-contribution">
+<p>
+See
+<a href="https://github.com/emacs-aiern/aiern/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+for guidelines for issues and pull requests.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Jeet Ray</p>
+<p class="date">Created: 2022-10-29 Sat 06:37</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

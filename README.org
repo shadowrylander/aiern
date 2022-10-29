@@ -1,0 +1,95 @@
+[[https://raw.githubusercontent.com/emacs-aiern/aiern/master/doc/logo.png]]
+
+[[https://travis-ci.org/emacs-aiern/aiern][[[https://travis-ci.org/emacs-aiern/aiern.svg?branch=master]]]]
+[[https://melpa.org/#/aiern][[[https://melpa.org/packages/aiern-badge.svg]]]]
+[[https://stable.melpa.org/#/aiern][[[https://stable.melpa.org/packages/aiern-badge.svg]]]]
+[[https://aiern.readthedocs.io/en/latest/?badge=latest][[[https://readthedocs.org/projects/aiern/badge/?version=latest]]]]
+[[https://www.gnu.org/licenses/gpl-3.0][[[https://img.shields.io/badge/License-GPL%20v3-blue.svg]]]]
+
+aiern is an *e*xtensible *vi* *l*ayer for
+[[http://www.gnu.org/software/emacs/][Emacs]]. It emulates the main
+features of [[http://www.vim.org/][Vim]], and provides facilities for
+writing custom extensions. Also see our page on
+[[http://emacswiki.org/emacs/aiern][EmacsWiki]].
+
+* Installation
+  :PROPERTIES:
+  :CUSTOM_ID: installation
+  :END:
+See the
+[[https://aiern.readthedocs.io/en/latest/overview.html#installation-via-package-el][official
+documentation]] for installation instructions. We recommend using
+/package.el/.
+
+As a quickstart, you can add the following code to your Emacs init file.
+
+#+begin_example
+  ;; Set up package.el to work with MELPA
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  (package-refresh-contents)
+
+  ;; Download aiern
+  (unless (package-installed-p 'aiern)
+    (package-install 'aiern))
+
+  ;; Enable aiern
+  (require 'aiern)
+  (aiern-mode 1)
+#+end_example
+
+** Dependencies
+   :PROPERTIES:
+   :CUSTOM_ID: dependencies
+   :END:
+
+- aiern requires Emacs 24.1 or later.
+
+- aiern requires any of the following for =C-r=:
+
+  - =undo-redo= from Emacs 28
+  - The [[http://www.emacswiki.org/emacs/UndoTree][undo-tree]] package
+  - The [[https://gitlab.com/ideasman42/emacs-undo-fu][undo-fu]] package
+
+- For the motions =g;= =g,= and for the last-change-register =.=, aiern
+  requires the [[https://github.com/emacs-aiern/goto-chg][goto-chg.el]]
+  package, which provides the functions =goto-last-change= and
+  =goto-last-change-reverse=.
+
+- For Emacs 24.1 and 24.2 aiern also requires
+  [[https://elpa.gnu.org/packages/cl-lib.html][cl-lib]].
+
+* Documentation
+  :PROPERTIES:
+  :CUSTOM_ID: documentation
+  :END:
+The latest version of the documentation is readable online
+[[https://aiern.readthedocs.io/en/latest/index.html][here]]. It is also
+available as
+[[https://readthedocs.org/projects/aiern/downloads/pdf/latest/][PDF]]
+and as
+[[https://readthedocs.org/projects/aiern/downloads/epub/latest/][EPUB]].
+
+* Mailing list
+  :PROPERTIES:
+  :CUSTOM_ID: mailing-list
+  :END:
+aiern is discussed at the
+[[http://lists.ourproject.org/cgi-bin/mailman/listinfo/implementations-list][gmane.emacs.vim-emulation]]
+mailing list.
+
+* IRC
+  :PROPERTIES:
+  :CUSTOM_ID: irc
+  :END:
+Visit us on =irc.libera.chat #aiern-mode=.
+
+* Contribution
+  :PROPERTIES:
+  :CUSTOM_ID: contribution
+  :END:
+See
+[[https://github.com/emacs-aiern/aiern/blob/master/CONTRIBUTING.md][CONTRIBUTING.md]]
+for guidelines for issues and pull requests.
