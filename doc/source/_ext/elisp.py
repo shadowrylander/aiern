@@ -14,7 +14,7 @@ from sphinx.util.docfields import Field
 from sphinx.util.nodes import make_refnode
 
 
-with open(path.join(path.dirname(__file__), '..', '..', 'docstringdb.json')) as f:
+with open(path.join(path.dirname(__file__), "..", "..", "docstringdb.json")) as f:
     DATA = json.load(f)
 
 
@@ -25,27 +25,30 @@ re_item = re.compile(r"([^\n])\n- ")
 re_sexp = re.compile(r"\([A-Z \-\.'`\[\]]+\)|[A-Z\-]+")
 re_capitals = re.compile(r"[A-Z\-]+")
 re_nonspace = re.compile(r"[^ ]")
-re_signature = re.compile(r'\(fn (.*)\)')
+re_signature = re.compile(r"\(fn (.*)\)")
 re_keymap_or_kbd = re.compile(r"\\[\[<]([^\]>]*)[\]>]")
 
 emphasis = [
-    'thing-at-point',
+    "thing-at-point",
 ]
 
+
 def emacs_is_local(var):
-    return DATA[var]['local']
+    return DATA[var]["local"]
+
 
 def emacs_default_value(var):
-    default = DATA[var]['default']
-    tp = DATA[var]['default-type']
-    if tp == 'string':
+    default = DATA[var]["default"]
+    tp = DATA[var]["default-type"]
+    if tp == "string":
         rep = repr(default)[1:-1]
         return f'"{rep}"'
     return str(default)
 
+
 def process_docstring(docstring, capitals=None):
     # Remove explicit signature
-    docstring = re_signature.sub('', docstring)
+    docstring = re_signature.sub("", docstring)
 
     # Add code blocks to indented sections
     def blockified_lines(lines):
@@ -56,40 +59,43 @@ def process_docstring(docstring, capitals=None):
             except StopIteration:
                 indented = None
             if indented is True and not in_block:
-                yield '.. code-block:: elisp'
-                yield ''
+                yield ".. code-block:: elisp"
+                yield ""
                 in_block = True
             elif indented is False:
                 in_block = False
             yield line
-    docstring = '\n'.join(blockified_lines(docstring.split('\n')))
+
+    docstring = "\n".join(blockified_lines(docstring.split("\n")))
 
     # Substitute `aiern-alpha' with :elisp:ref:`aiern-alpha`
-    docstring = re_aierncode.sub(r':elisp:ref:`\1`', docstring)
+    docstring = re_aierncode.sub(r":elisp:ref:`\1`", docstring)
 
     # Substitute `alpha' with ``alpha``
-    docstring = re_code.sub(r'``\1``', docstring)
+    docstring = re_code.sub(r"``\1``", docstring)
 
     # Substitute `:alpha' with ``alpha``
-    docstring = re_kwd.sub(r'``\1``', docstring)
+    docstring = re_kwd.sub(r"``\1``", docstring)
 
     # Translate key bindings
     keymap = None
+
     def substitute_binding(match):
         nonlocal keymap
-        if match.group(0)[1] == '<':
+        if match.group(0)[1] == "<":
             keymap = match.group(1)
-            return ''
+            return ""
         if keymap is None:
             print(docstring)
             assert False
-            return '???'
-        key = DATA[keymap]['keymap-inv'][match.group(1)]
-        return f':kbd:`{key}`'
+            return "???"
+        key = DATA[keymap]["keymap-inv"][match.group(1)]
+        return f":kbd:`{key}`"
+
     docstring = re_keymap_or_kbd.sub(substitute_binding, docstring)
 
     # Add empty line between list items
-    docstring = re_item.sub(r'\1\n\n- ', docstring)
+    docstring = re_item.sub(r"\1\n\n- ", docstring)
 
     if capitals is None:
         capitals = []
@@ -101,73 +107,77 @@ def process_docstring(docstring, capitals=None):
         s = match.group(0)
         if re_capitals.match(s):
             if s in capitals:
-                return f'*{s}*'
+                return f"*{s}*"
             return s
         else:
             capitals.extend(re_capitals.findall(s))
-            return f'``{s}``'
+            return f"``{s}``"
+
     docstring = re_sexp.sub(substitute_sexp, docstring)
 
     # Italicize some words
     for s in emphasis:
-        docstring = docstring.replace(s, f'*{s}*')
+        docstring = docstring.replace(s, f"*{s}*")
 
     return docstring
 
+
 def emacs_variable_docstring(var):
-    docstring = DATA[var]['var-docstring']
+    docstring = DATA[var]["var-docstring"]
     return process_docstring(docstring)
 
+
 def emacs_function_docstring(var):
-    docstring = DATA[var]['fn-docstring']
+    docstring = DATA[var]["fn-docstring"]
     return process_docstring(docstring, capitals=emacs_argnames(var))
+
 
 def emacs_argnames(var):
     arglist = emacs_arglist(var)
     return re_capitals.findall(arglist)
 
+
 def emacs_arglist(var):
-    docstring = DATA[var]['fn-docstring']
+    docstring = DATA[var]["fn-docstring"]
     match = re_signature.search(docstring)
     if match:
         return match.group(1)
 
-    arglist = [arg.upper() for arg in DATA[var]['arglist']]
+    arglist = [arg.upper() for arg in DATA[var]["arglist"]]
     state = None
-    ret = ''
+    ret = ""
     for arg in arglist:
-        if arg in ('&REST', '&OPTIONAL'):
-            if state == '&OPTIONAL':
-                ret += ']'
+        if arg in ("&REST", "&OPTIONAL"):
+            if state == "&OPTIONAL":
+                ret += "]"
             state = arg
-            ret += ' ['
+            ret += " ["
             continue
-        ret += ('' if state in ('&REST', '&OPTIONAL') else ' ') + arg
-        if state == '&OPTIONAL':
-            state += '-CONT'
-    if state is not None and state.startswith('&OPTIONAL'):
-        ret += ']'
-    if state == '&REST':
-        ret += '...]'
+        ret += ("" if state in ("&REST", "&OPTIONAL") else " ") + arg
+        if state == "&OPTIONAL":
+            state += "-CONT"
+    if state is not None and state.startswith("&OPTIONAL"):
+        ret += "]"
+    if state == "&REST":
+        ret += "...]"
     return ret
 
 
 class AbstractElisp(ObjectDescription):
-
     def add_target_and_index(self, name, sig, signode):
-        anchor = f'elispobj-{sig}'
-        signode['ids'].append(anchor)
+        anchor = f"elispobj-{sig}"
+        signode["ids"].append(anchor)
 
-        objs = self.env.domaindata['elisp']['objects']
+        objs = self.env.domaindata["elisp"]["objects"]
         objs[sig] = {
-            'docname': self.env.docname,
-            'anchor': f'elispobj-{sig}',
-            'type': self.object_type,
+            "docname": self.env.docname,
+            "anchor": f"elispobj-{sig}",
+            "type": self.object_type,
         }
 
 
 class AbstractVariable(AbstractElisp):
-    object_type = 'variable'
+    object_type = "variable"
 
     def handle_signature(self, sig, signode):
         signode += addnodes.desc_annotation(sig, sig)
@@ -178,11 +188,11 @@ class AbstractVariable(AbstractElisp):
 
         default = self.default_value()
         if default:
-            extra.append(f'Default: ``{default}``')
+            extra.append(f"Default: ``{default}``")
         if self.is_buffer_local():
-            extra.append('buffer-local')
+            extra.append("buffer-local")
 
-        self.content.data.extend(['', ', '.join(extra)])
+        self.content.data.extend(["", ", ".join(extra)])
         retval = super().run()
         return retval
 
@@ -198,7 +208,7 @@ class Variable(AbstractVariable):
             return None
 
     def is_buffer_local(self):
-        return 'bufloc' in self.arguments[1:]
+        return "bufloc" in self.arguments[1:]
 
 
 class AutoVariable(AbstractVariable):
@@ -212,7 +222,7 @@ class AutoVariable(AbstractVariable):
 
     def run(self):
         docstring = emacs_variable_docstring(self.arguments[0])
-        self.content.data.extend(docstring.split('\n'))
+        self.content.data.extend(docstring.split("\n"))
         return super().run()
 
 
@@ -221,40 +231,42 @@ class AutoFunction(AbstractElisp):
 
     @property
     def object_type(self):
-        return 'macro' if DATA[self.arguments[0]]['macrop'] else 'function'
+        return "macro" if DATA[self.arguments[0]]["macrop"] else "function"
 
     def handle_signature(self, sig, signode):
         args = emacs_arglist(sig)
-        signode += addnodes.desc_annotation(sig, f'({sig} {args})')
+        signode += addnodes.desc_annotation(sig, f"({sig} {args})")
         return sig
 
     def run(self):
         docstring = emacs_function_docstring(self.arguments[0])
-        self.content.data.extend(docstring.split('\n'))
+        self.content.data.extend(docstring.split("\n"))
         return super().run()
 
 
 class ElispIndex(Index):
-    name = 'index'
-    localname = 'Emacs lisp functions and variables'
-    shortname = 'Elisp'
+    name = "index"
+    localname = "Emacs lisp functions and variables"
+    shortname = "Elisp"
 
     def generate(self, docnames=None):
         index = {}
-        for name, item in self.domain.data['objects'].items():
-            if name.startswith('aiern-'):
+        for name, item in self.domain.data["objects"].items():
+            if name.startswith("aiern-"):
                 letter = name[5].upper()
             else:
                 letter = name[0].upper()
-            index.setdefault(letter, []).append((
-                name,
-                0,
-                item['docname'],
-                item['anchor'],
-                item['type'],
-                '',
-                '',
-            ))
+            index.setdefault(letter, []).append(
+                (
+                    name,
+                    0,
+                    item["docname"],
+                    item["anchor"],
+                    item["type"],
+                    "",
+                    "",
+                )
+            )
 
         index = {k: sorted(v, key=lambda k: k[0].lower()) for k, v in index.items()}
         index = list(index.items())
@@ -263,27 +275,27 @@ class ElispIndex(Index):
 
 
 class Elisp(Domain):
-    name = 'elisp'
-    label = 'Emacs lisp'
+    name = "elisp"
+    label = "Emacs lisp"
 
     object_types = {
-        'variable': ObjType('variable', 'variable', 'obj'),
-        'autovariable': ObjType('autovariable', 'autovariable', 'obj'),
-        'autofunction': ObjType('autofunction', 'autofunction', 'obj'),
+        "variable": ObjType("variable", "variable", "obj"),
+        "autovariable": ObjType("autovariable", "autovariable", "obj"),
+        "autofunction": ObjType("autofunction", "autofunction", "obj"),
     }
 
     directives = {
-        'variable': Variable,
-        'autovariable': AutoVariable,
-        'autofunction': AutoFunction,
+        "variable": Variable,
+        "autovariable": AutoVariable,
+        "autofunction": AutoFunction,
     }
 
     roles = {
-        'ref': XRefRole(),
+        "ref": XRefRole(),
     }
 
     initial_data = {
-        'objects': {},
+        "objects": {},
     }
 
     indices = {
@@ -291,19 +303,25 @@ class Elisp(Domain):
     }
 
     def resolve_xref(self, env, fromdocname, builder, typ, target, node, contnode):
-        obj = self.data['objects'].get(target, None)
+        obj = self.data["objects"].get(target, None)
         if obj is None:
             return None
-        return make_refnode(builder, fromdocname, obj['docname'], obj['anchor'], contnode, obj['anchor'])
+        return make_refnode(
+            builder, fromdocname, obj["docname"], obj["anchor"], contnode, obj["anchor"]
+        )
 
 
 def setup(app):
     app.add_domain(Elisp)
-    StandardDomain.initial_data['labels']['elispindex'] = ('elisp-index', '', 'Emacs lisp functions and variables')
-    StandardDomain.initial_data['anonlabels']['elispindex'] = ('elisp-index', '')
+    StandardDomain.initial_data["labels"]["elispindex"] = (
+        "elisp-index",
+        "",
+        "Emacs lisp functions and variables",
+    )
+    StandardDomain.initial_data["anonlabels"]["elispindex"] = ("elisp-index", "")
 
     return {
-        'version': '0.1',
-        'parallel_read_safe': True,
-        'parallel_write_safe': True,
+        "version": "0.1",
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
     }
